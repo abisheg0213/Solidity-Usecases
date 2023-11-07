@@ -4,5 +4,5 @@
 3. Job marketplace with payament functinality made in ethers
 4. ERC20
 5. English Auction with Ether features 
-   ### Documentation for miselanious functions are available :
+   ### Documentation for miscellaneous functions are available :
     https://www.notion.so/Solidity-Programming-Language-1227e2c9e1fb42029eb41be70bcbc0a1 
