@@ -43,6 +43,7 @@ contract voting{
     {
         require(stage==Stage.vote);
         require(isvoted[msg.sender]==false);
+        require(isvoter(msg.sender)==true);
         candidates[cand_add].no+=1;
     }
     function start_vote() public onlyOwner
@@ -66,5 +67,21 @@ contract voting{
             }
         }
         return add;
+    }
+    function withdraw_funds() public 
+    {
+        payable (owner).transfer(address(this).balance);
+    }
+    function isvoter(address add) public view returns (bool)
+    {
+        bool res=false;
+        for (uint i=0;i<voters.length;i++)
+        {
+            if(voters[i]==add)
+            {
+                res=true;
+            }
+        }
+        return res;
     }
 }
