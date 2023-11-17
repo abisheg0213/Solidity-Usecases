@@ -1,27 +1,25 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.14;
-contract escrow{
-    address agent;
-    constructor()
+pragma solidity 0.8.14;
+contract Escrow{
+    uint deposit_count;
+    mapping (bytes32=> uint) public depoit_hash;
+    function create_hash(uint amount)public view returns (bytes32)
     {
-        agent=msg.sender;
+        return keccak256(abi.encode(msg.sender,amount,deposit_count));
     }
-    event deposit_made(address payee,uint amount);
-    event withdraw_made(address payee,uint amount);
-    mapping (address=>uint) deposits;
-    modifier onlyAgent{
-        require(msg.sender==agent);
-        _;
-    }
-    function deposit(address payee) public payable onlyAgent
+    function deposit(bytes32 hash) public payable 
     {
-        deposits[payee]+=msg.value;
-        emit deposit_made(payee, msg.value);
+        require(hash!=0);
+        require(depoit_hash[hash]==0);
+        require(msg.value>0);
+        depoit_hash[hash]=msg.value;
+        deposit_count+=1;
     }
-    function withdraw(address payee) public onlyAgent
-    {
-        payable(payee).transfer(deposits[payee]);
-        emit withdraw_made(payee,deposits[payee] );
-        deposits[payee]=0;
-    } 
+    function withdraw(bytes32 hash,address rec) public {
+        require(hash!=0);
+        require(depoit_hash[hash]>0);
+        payable (rec).transfer(depoit_hash[hash]);
+        depoit_hash[hash]=0;
+    }
+
 }
